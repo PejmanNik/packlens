@@ -1,0 +1,5 @@
+node_modules
+dist
+**/*.vsix
+packages/vsc/README.md
+packages/vsc/CHANGELOG.md

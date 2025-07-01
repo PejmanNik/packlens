@@ -1,0 +1,26 @@
+{
+  "name": "@packlens/common",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index",
+  "types": "dist/index",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build"
+  },
+  "devDependencies": {
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.3.1"
+  },
+  "dependencies": {
+    "@msgpack/msgpack": "^3.1.1",
+    "neverthrow": "^8.2.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@packlens",
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/common",
+    "packages/vsc",
+    "packages/web"
+  ],
+  "scripts": {
+    "build": "npm run build -w ./packages/common && npm run build -w ./packages/web && npm run compile -w ./packages/vsc ",
+    "web:dev": "npm run dev -w ./packages/web"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}

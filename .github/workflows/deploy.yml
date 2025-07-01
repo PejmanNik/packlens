@@ -1,0 +1,57 @@
+name: Deploy to GitHub Pages And VS Code Market place
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: "npm"
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+      - name: Upload web artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./packages/web/dist"
+
+      - name: Package by vsce
+        run: npx vsce package
+        working-directory: packages/vsc/
+      - uses: actions/upload-artifact@v4
+        with:
+          path: "./packages/vsc/*.vsix"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: success()
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - run: npx vsce publish --packagePath $(find . -iname *.vsix)
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
